@@ -46,3 +46,24 @@ We pipe the output from the generator to `localhost:5000` since that is where Lo
 
 The suggested queries are available in the [queries.txt](./queries.txt) file. 
 Each query can be copied to Kibana DevTools and ran from there (including the `GET _search` header). DevTools are available on this [link](localhost:5601/app/kibana#/dev_tools/console).
+
+You can also query using cURL or any programming language with an HTTP library. An example of a cURL query:
+
+```bash
+curl -XGET 'localhost:9200/_search' -H 'Content-Type: application/json' -d'
+{
+  ... insert query here ...
+}
+'
+```
+
+Or using Python and requests library:
+
+```python
+import requests
+import json
+query = { ... insert query here ... }
+
+resp = requests.get("http://localhost:9200/_search", data=json.dumps(query), headers={'Content-Type': 'application/json'})
+print(resp.json())
+```
