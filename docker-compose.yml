@@ -10,7 +10,19 @@ services:
       - "9200:9200"
       - "9300:9300"
     environment:
-      ES_JAVA_OPTS: "-Xmx4096m -Xms4096m"
+      ES_JAVA_OPTS: "-Xmx1024m -Xms1024m"
+    networks:
+      - elk
+
+  elasticsearch-worker:
+    build: elasticsearch/
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - "9200"
+      - "9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx1024m -Xms1024m"
     networks:
       - elk
 
