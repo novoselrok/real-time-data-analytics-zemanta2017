@@ -1,0 +1,68 @@
+{
+    "index_patterns": ["logstash-*"],
+    "settings": {
+      "number_of_shards":   3, 
+      "number_of_replicas": 1,
+      "refresh_interval": "45s",
+      "translog": {
+        "durability": "async",
+        "sync_interval": "45s"
+      }
+    },
+    "aliases" : {
+      "ad_data": {}
+    },
+    "mappings": {
+      "doc": {
+        "properties": {
+          "bid.ad_url": {
+            "type": "keyword"
+          },
+          "bid.id": {
+            "type": "keyword"
+          },
+          "bid.publisher": {
+            "type": "keyword"
+          },
+          "bid.targeting.demographic.age_range": {
+            "type": "keyword"
+          },
+          "bid.targeting.demographic.gender": {
+            "type": "keyword"
+          },
+          "bid.targeting.device.os": {
+            "type": "keyword"
+          },
+          "bid.targeting.device.type": {
+            "type": "keyword"
+          },
+          "bid.targeting.geo.country": {
+            "type": "keyword"
+          },
+          "bid.targeting.geo.region": {
+            "type": "keyword"
+          },
+          "bid.targeting.geo.zip": {
+            "type": "keyword"
+          },
+          "bid.type": {
+            "type": "keyword"
+          },
+          "click.bid_id": {
+            "type": "keyword"
+          },
+          "click.type": {
+            "type": "keyword"
+          },
+          "win.bid_id": {
+            "type": "keyword"
+          },
+          "win.type": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+  
+  

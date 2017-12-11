@@ -1,0 +1,183 @@
+# 1. How a certain ad performed, what was the spend and in which locations it was spending the most.
+GET _search
+{
+  "query": {
+    "term": {
+      "bid.ad_url": {
+        "value": "https://ad.zemanta.com/3200"
+      }
+    }
+  }, 
+  "aggs": {
+    "ad_spend": {
+      "sum": {
+        "field": "win.win_price"
+      }
+    },
+    "countries": {
+      "terms": {
+        "field": "bid.targeting.geo.country"
+      },
+      "aggs": {
+        "spend_per_country": {
+          "sum": {
+            "field": "win.win_price"
+          }
+        }
+      }
+    }
+  }
+}
+
+# 2. Best ads in a campaign in a certain date range e.g. last day (clicks, impressions, spend). 
+GET _search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "bid.campaign_id": {
+              "value": 272
+            }
+          }
+        },
+        {
+          "range": {
+            "bid.time": {
+              "gte": "now-1d/d",
+              "lte": "now/d"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "wins": {
+      "value_count": {
+        "field": "win.type"
+      }
+    },
+    "clicks": {
+      "value_count": {
+        "field": "click.type"
+      }
+    },
+    "spend": {
+      "sum": {
+        "field": "win.win_price"
+      }
+    }
+  }
+}
+
+# 3. Spend of a certain ad by day and publisher in New York.
+GET _search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "bid.targeting.geo.region": {
+              "value": "NY"
+            }
+          }
+        },
+        {
+          "term": {
+            "bid.ad_url": {
+              "value": "https://ad.zemanta.com/2606"  
+            }
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "days": {
+      "date_histogram": {
+        "field": "bid.time",
+        "interval": "day"
+      },
+      "aggs": {
+        "publishers": {
+          "terms": {
+            "field": "bid.publisher"
+          },
+          "aggs": {
+            "pub_spend": {
+              "sum": {
+                "field": "win.win_price"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+# 4. Top 100 ads broken down by device and zip code.
+GET _search
+{
+  "query": {
+    "exists": {
+      "field": "win.type"
+    }
+  },
+  "aggs": {
+    "ads": {
+      "terms": {
+        "field": "bid.ad_url",
+        "order": {
+          "wins_count": "desc"
+        },
+        "size": 100
+      },
+      "aggs": {
+        "device": {
+          "terms": {
+            "field": "bid.targeting.device.type"
+          }
+        },
+        "zip": {
+          "terms": {
+            "field": "bid.targeting.geo.zip"
+          }
+        },
+        "wins_count": {
+          "value_count": {
+            "field": "win.type"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+# 5. Which publishers seem to be fraudulent based on a lot of impressions.
+# Aggregate publishers and count their wins
+GET _search
+{
+  "aggs": {
+    "publishers": {
+      "terms": {
+        "field": "bid.publisher",
+        "order": {
+          "wins_count": "desc"
+        },
+        "size": 100
+      },
+      "aggs": {
+        "wins_count": {
+          "value_count": {
+            "field": "win.type"
+          }
+        }
+      }
+    }
+  }
+}
