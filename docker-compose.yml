@@ -40,6 +40,13 @@ services:
     depends_on:
       - elasticsearch
 
+  rollover-shrink:
+    build: rollover-shrink/
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
 networks:
   elk:
     driver: bridge
