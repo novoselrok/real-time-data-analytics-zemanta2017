@@ -9,6 +9,11 @@ This repo is the source code to my solution for 2017 Zemanta challenge: Real-tim
 * Logstash as a processing pipeline
 * Docker Compose for orchestrating the containers
 
+Branches:
+* `master`
+* `horizontal-scale` - demonstrating horizontal scalabilty of Elastisearch
+* `rollover-shrink` - demonstrating the Elasticsearch rollover and shrink APIs
+
 ## Running the project
 
 Since I'm using Docker running the project is just two commands:
